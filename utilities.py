@@ -19,6 +19,7 @@ def init_props():
     items=[
         ("gpt-4", "GPT-4 (powerful, expensive)", "Use GPT-4"),
         ("gpt-3.5-turbo", "GPT-3.5 Turbo (less powerful, cheaper)", "Use GPT-3.5 Turbo"),
+        ("deepseek-chat", "DeepSeek Chat (powerful, cheaper)", "Use DeepSeek Chat"),
     ],
     default="gpt-4",
 )
@@ -45,6 +46,10 @@ def generate_blender_code(prompt, chat_history, context, system_prompt):
             messages.append({"role": message.type.lower(), "content": message.content})
 
     # Add the current user message
+    if context.scene.gpt4_model == "deepseek-chat":
+        openai.api_base = "https://api.deepseek.com/v1"
+    else:
+        openai.api_base = "https://api.openai.com/v1"
     messages.append({"role": "user", "content": "Can you please write Blender code for me that accomplishes the following task: " + prompt + "? \n. Do not respond with anything that is not Python code. Do not provide explanations"})
 
 
